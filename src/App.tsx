@@ -2,7 +2,7 @@ import { useEffect, useState, type CSSProperties } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { ArrowDown, ArrowUpRight, Github, Instagram, Menu, X, ChevronLeft, ChevronRight, Sparkles, Clock3 } from 'lucide-react'
 
-const portrait = 'https://i.ibb.co/h1YfvL2d/image.webp'
+const portrait = 'https://github.com/agastyatomar.png'
 
 const services = [
   { id:'01', title:'Web Development', short:'From the first idea to the live site', color:'#d9c8f4', icon:'⌘', intro:'Thoughtful websites that turn ideas into useful digital experiences.', points:['Discovery & planning','UX and visual design','Front-end development','Responsive layouts','Performance & polish'], projects:['NexLearn','CodeForge'] },
