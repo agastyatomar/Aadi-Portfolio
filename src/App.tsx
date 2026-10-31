@@ -1,55 +1,106 @@
-import { useState } from 'react'
-import { motion } from 'framer-motion'
-import { ArrowDown, ArrowUpRight, Github, Instagram, Linkedin, Mail, Sparkles, Code2, Bot, Smartphone, Palette, Menu, X, MoveUpRight } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { AnimatePresence, motion } from 'framer-motion'
+import { ArrowDown, ArrowUpRight, Github, Instagram, Menu, X, ChevronLeft, ChevronRight, Sparkles, Clock3 } from 'lucide-react'
 
+const portrait = 'https://i.ibb.co/h1YfvL2d/image.webp'
+
+const services = [
+  { id:'01', title:'Web Development', short:'From the first idea to the live site', color:'#d9c8f4', icon:'⌘', intro:'Thoughtful websites that turn ideas into useful digital experiences.', points:['Discovery & planning','UX and visual design','Front-end development','Responsive layouts','Performance & polish'], projects:['NexLearn','CodeForge'] },
+  { id:'02', title:'AI & Automation', short:'Making everyday work more capable', color:'#c9d9c4', icon:'✳', intro:'Experiments with AI, APIs and automations that make technology feel more helpful.', points:['AI assistant experiments','API integrations','Voice interfaces','Workflow automation','Local-first tools'], projects:['AETHER AI'] },
+  { id:'03', title:'App Development', short:'Ideas made for everyday use', color:'#f0c5ae', icon:'▣', intro:'Exploring practical apps with clean interfaces and a focus on the experience.', points:['Product thinking','Interface design','App architecture','Testing & iteration','Launch-ready polish'], projects:['NovaTune','ANIMATRIX'] },
+  { id:'04', title:'UI/UX Design', short:'Clarity in every interaction', color:'#e8c6cb', icon:'◉', intro:'Interfaces shaped around real people, clear structure and small details.', points:['Research & structure','Wireframes','Visual systems','Motion & interaction','Responsive design'], projects:['NexLearn','CodeForge'] },
+  { id:'05', title:'Creative Experiments', short:'Learning by making something new', color:'#f1dfaa', icon:'✧', intro:'Small experiments across the web, motion, graphics and emerging technology.', points:['Creative coding','Motion studies','Visual experiments','Prototyping','Continuous learning'], projects:['Personal experiments'] },
+]
 const projects = [
-  { n: '01', name: 'AETHER AI', type: 'Personal AI assistant', desc: 'A voice-first assistant experiment bringing useful tools, automation and a personal AI interface together.', tags: ['AI', 'Voice', 'Automation'], color: 'mint', url: 'https://github.com/agastyatomar/AETHER' },
-  { n: '02', name: 'NexLearn', type: 'Learning platform', desc: 'A learning space built to make quality study resources feel simple, focused and accessible.', tags: ['Web app', 'Education', 'Full-stack'], color: 'blue', url: 'https://github.com/agastyatomar/NexLearn' },
-  { n: '03', name: 'CodeForge', type: 'Developer workspace', desc: 'An experimental browser workspace for building, organizing and exploring code projects.', tags: ['Developer tools', 'Workspace'], color: 'orange', url: 'https://github.com/agastyatomar/CodeForge' },
-  { n: '04', name: 'NovaTune', type: 'Music app', desc: 'A music player project focused on a clean listening experience and thoughtful product design.', tags: ['Android', 'Music', 'Open source'], color: 'pink', url: 'https://github.com/agastyatomar/NovaTune' },
+  { name:'NexLearn', category:'Learning platform', desc:'A learning platform built to make study resources feel simple, focused and accessible.', tags:['Full-stack','Education'], initials:'NL', tone:'lavender', url:'https://github.com/agastyatomar/NexLearn' },
+  { name:'AETHER AI', category:'Personal AI assistant', desc:'A voice-first assistant experiment bringing useful tools and automation into one interface.', tags:['AI','Voice','Automation'], initials:'A', tone:'sage', url:'https://github.com/agastyatomar/AETHER' },
+  { name:'CodeForge', category:'Developer workspace', desc:'An experimental browser workspace for creating, organizing and exploring code projects.', tags:['Developer tools','Web app'], initials:'CF', tone:'peach', url:'https://github.com/agastyatomar/CodeForge' },
+  { name:'NovaTune', category:'Music app', desc:'A music player project focused on a clean listening experience and thoughtful product design.', tags:['Android','Music'], initials:'NT', tone:'rose', url:'https://github.com/agastyatomar/NovaTune' },
 ]
-const doors = [
-  { icon: Code2, title: 'WEB DEVELOPMENT', sub: 'Interfaces that feel alive', detail: 'React · TypeScript · Next.js · CSS' },
-  { icon: Bot, title: 'AI & AUTOMATION', sub: 'Making ideas more capable', detail: 'LLMs · APIs · Workflow experiments' },
-  { icon: Smartphone, title: 'APP BUILDING', sub: 'Useful things for everyday life', detail: 'Android · Web apps · Product thinking' },
-  { icon: Palette, title: 'UI / UX DESIGN', sub: 'Details make the difference', detail: 'Visual systems · Motion · Interaction' },
-]
+const roles = ['Web Developer','App Developer','AI Explorer','Creative Builder']
+
 function App() {
-  const [active, setActive] = useState<number | null>(null)
+  const [active, setActive] = useState(0)
+  const [role, setRole] = useState(0)
   const [menu, setMenu] = useState(false)
-  const [flipped, setFlipped] = useState(false)
-  const nav = [['Work', '#work'], ['About', '#about'], ['Skills', '#skills'], ['Contact', '#contact']]
-  return <main>
-    <div className="grain" />
-    <header className="nav wrap">
-      <a className="brand" href="#top"><span className="brand-mark">a.</span><span>AADI<span className="brand-dot">®</span></span></a>
-      <nav className={menu ? 'nav-links open' : 'nav-links'}>{nav.map(([label, href]) => <a key={label} href={href} onClick={() => setMenu(false)}>{label}</a>)}</nav>
-      <a className="availability" href="mailto:hello@agastyatomar.dev"><i /> OPEN TO IDEAS <ArrowUpRight size={14}/></a>
-      <button className="menu-btn" onClick={() => setMenu(!menu)} aria-label="Toggle menu">{menu ? <X/> : <Menu/>}</button>
+  const [time, setTime] = useState('')
+  const [dark, setDark] = useState(false)
+
+  useEffect(() => {
+    const update = () => setTime(new Intl.DateTimeFormat('en-IN', { hour:'numeric', minute:'2-digit', hour12:true }).format(new Date()))
+    update()
+    const timer = window.setInterval(update, 30000)
+    return () => window.clearInterval(timer)
+  }, [])
+
+  useEffect(() => {
+    const timer = window.setInterval(() => setRole(v => (v + 1) % roles.length), 2600)
+    return () => window.clearInterval(timer)
+  }, [])
+
+  const selected = services[active]
+  return <main className={dark ? 'site dark' : 'site'} id="top">
+    <div className="ambient-grain" />
+    <header className="topbar shell">
+      <a className="wordmark" href="#top"><span className="mark">a.</span><span>AADI<span className="reg">®</span></span></a>
+      <nav className={menu ? 'navigation show' : 'navigation'}>
+        <a href="#doors" onClick={() => setMenu(false)}>What I do</a>
+        <a href="#work" onClick={() => setMenu(false)}>Selected work</a>
+        <a href="#about" onClick={() => setMenu(false)}>About</a>
+        <a href="#contact" onClick={() => setMenu(false)}>Contact</a>
+      </nav>
+      <div className="top-actions"><span className="local-time"><Clock3 size={13}/>{time || '—'}</span><button className="theme-toggle" onClick={() => setDark(!dark)} aria-label="Toggle colour theme">{dark ? '☼' : '◐'}</button></div>
+      <button className="menu-toggle" onClick={() => setMenu(!menu)} aria-label="Toggle menu">{menu ? <X/> : <Menu/>}</button>
     </header>
 
-    <section className="hero wrap" id="top">
-      <div className="hero-top"><span className="eyebrow"><span className="cross">✳</span> INDEPENDENT DEVELOPER & CREATIVE MIND</span><span className="hero-index">PORTFOLIO — 2026</span></div>
-      <div className="hero-title"><motion.h1 initial={{ opacity: 0, y: 35 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .8 }}>I BUILD<br/><span className="outline">DIGITAL</span><br/>THINGS<span className="lime">.</span></motion.h1>
-        <motion.div className="hero-aside" initial={{opacity:0,y:20}} animate={{opacity:1,y:0}} transition={{delay:.3}}><div className="orbit"><span>✳</span><b>✳</b></div><p>Curious by nature.<br/>Builder by choice.</p><a href="#about" className="round-link"><ArrowDown size={18}/></a></motion.div>
+    <section className="hero shell">
+      <div className="hero-meta"><span><i className="status-dot"/> INDEPENDENT CREATIVE / STUDENT</span><span>BASED IN INDIA · 2026</span></div>
+      <div className="hero-copy">
+        <motion.p className="hello" initial={{opacity:0,y:16}} animate={{opacity:1,y:0}} transition={{duration:.6}}>A LITTLE BIT OF CURIOSITY GOES A LONG WAY.</motion.p>
+        <motion.h1 initial={{opacity:0,y:24}} animate={{opacity:1,y:0}} transition={{duration:.75,delay:.1}}>Hi, I'm Agastya.<br/><span className="subline">I am a</span></motion.h1>
+        <div className="notepad" aria-live="polite"><span className="spiral">⌁　⌁　⌁　⌁　⌁　⌁　⌁</span><AnimatePresence mode="wait"><motion.strong key={role} initial={{opacity:0,y:15}} animate={{opacity:1,y:0}} exit={{opacity:0,y:-12}} transition={{duration:.25}}>{roles[role]}</motion.strong></AnimatePresence><span className="paper-number">AADI / 0{role+1}</span></div>
+        <div className="hero-ctas"><a href="#contact" className="pill-button">Start a project <span>↗</span></a><a href="#work" className="quiet-link">See my work <ArrowDown size={14}/></a></div>
       </div>
-      <div className="hero-bottom"><p>HEY, I'M <strong>AGASTYA TOMAR</strong> — ALSO KNOWN AS AADI.<br/>A STUDENT EXPLORING CODE, DESIGN & THE FUTURE.</p><span className="scroll-note">SCROLL TO EXPLORE <span>↓</span></span></div>
-      <div className="hero-line"><span>✳</span><span>DESIGN-LED DEVELOPMENT</span><span>✳</span><span>ALWAYS EXPERIMENTING</span><span>✳</span></div>
+      <div className="portrait-wrap"><div className="portrait-halo"/><img className="portrait" src={portrait} alt="Portrait of Agastya Tomar" onError={e => { (e.currentTarget as HTMLImageElement).style.opacity='0' }}/><span className="portrait-caption">AGASTYA TOMAR<br/>AKA AADI · 2026</span></div>
+      <div className="hero-foot"><span>BUILDING DIGITAL THINGS WITH PURPOSE.</span><a href="#doors">SCROLL TO EXPLORE ↓</a></div>
     </section>
 
-    <section className="intro section-pad wrap" id="about">
-      <div className="section-kicker"><span>01 / A LITTLE INTRO</span><span>THE PERSON BEHIND THE PIXELS</span></div>
-      <div className="intro-grid"><h2>NOT JUST<br/>WRITING CODE.<br/><em>MAKING</em><br/>THINGS MATTER.</h2><div className="intro-copy"><span className="small-star">✳</span><p className="lead">I'm Aadi — a student, aspiring developer and curious problem solver from India.</p><p>I love exploring how technology works and turning interesting ideas into useful digital experiences. From web apps to AI experiments, I'm learning by building, breaking and building again.</p><p className="muted">Currently focused on growing my skills, shipping personal projects and staying curious about what's next.</p><a href="#work" className="text-link">EXPLORE MY WORK <MoveUpRight size={16}/></a></div></div>
+    <section className="doors-section section shell" id="doors">
+      <div className="section-label"><span>01 — WHAT I DO</span><span>THE WORK BEHIND THE IDEAS</span></div>
+      <div className="doors-intro"><h2>Magic happens<br/><em>behind the doors.</em></h2><p>Different interests, one curious mind.<br/>Pick a door and explore what I love building.</p></div>
+      <div className="doors-layout">
+        <div className="door-stack" role="tablist" aria-label="Areas of work">
+          {services.map((s,i)=><button role="tab" aria-selected={active===i} className={'door-pill '+(active===i?'selected':'')} style={{'--door-color':s.color} as React.CSSProperties} key={s.id} onClick={() => setActive(i)}><span className="door-symbol">{s.icon}</span><span>{s.title}</span><ArrowUpRight size={17}/></button>)}
+        </div>
+        <AnimatePresence mode="wait">
+          <motion.article className="door-detail-panel" key={selected.id} initial={{opacity:0,x:24}} animate={{opacity:1,x:0}} exit={{opacity:0,x:-16}} transition={{duration:.35}}>
+            <div className="detail-top"><span>DOOR {selected.id} / 05</span><span>EXPLORE AN AREA</span></div>
+            <div className="door-scene"><div className="wall-light"/><div className="arch"><div className="door-leaf"><span className="door-plaque">{selected.title}</span><span className="door-handle"/></div></div><span className="scene-caption">OPEN A NEW POSSIBILITY</span></div>
+            <div className="detail-copy"><span className="detail-kicker">{selected.short}</span><h3>{selected.title}</h3><p>{selected.intro}</p><ul>{selected.points.map(p=><li key={p}><span>✓</span>{p}</li>)}</ul><div className="related"><span>RELATED PROJECTS</span><b>{selected.projects.join('　·　')}</b></div></div>
+          </motion.article>
+        </AnimatePresence>
+      </div>
     </section>
 
-    <section className="skills section-pad" id="skills"><div className="wrap"><div className="section-kicker"><span>02 / WHAT I'M INTO</span><span>OPEN A DOOR</span></div><div className="skills-head"><h2>AREAS OF<br/><em>CURIOSITY.</em></h2><p>Four directions I keep exploring.<br/>Tap a door to take a closer look.</p></div><div className="doors">{doors.map((d,i)=>{const Icon=d.icon;return <button className={active===i?'door active':'door'} key={d.title} onClick={()=>setActive(active===i?null:i)}><span className="door-no">0{i+1}</span><Icon className="door-icon" size={27}/><span className="door-title">{d.title}</span><span className="door-sub">{d.sub}</span><span className="door-detail">{active===i?d.detail:'EXPLORE ↗'}</span></button>})}</div></div></section>
+    <section className="work-section section shell" id="work">
+      <div className="section-label"><span>02 — SELECTED WORK</span><span>A FEW THINGS I'VE BEEN MAKING</span></div>
+      <div className="work-intro"><h2>Ideas into<br/><em>experiences.</em></h2><p>A small collection of projects, experiments<br/>and things I'm proud to keep improving.</p></div>
+      <div className="project-grid">
+        {projects.map((p,i)=><motion.a className="project-card" href={p.url} target="_blank" rel="noreferrer" key={p.name} initial={{opacity:0,y:28}} whileInView={{opacity:1,y:0}} viewport={{once:true,amount:.15}} transition={{duration:.5,delay:i*.08}}>
+          <div className={'project-visual '+p.tone}><div className="browser-bar"><span/><span/><span/><small>{p.name.toLowerCase()}.app</small></div><div className="mockup-content"><span className="mockup-mark">{p.initials}</span><strong>{p.name}</strong><i>{p.category}</i><div className="mock-lines"><b/><b/><b/></div></div><span className="project-count">0{i+1} / 04</span></div>
+          <div className="project-meta"><div><span>{p.category}</span><h3>{p.name}</h3><p>{p.desc}</p><div className="tag-row">{p.tags.map(t=><small key={t}>{t}</small>)}</div></div><span className="project-open"><ArrowUpRight size={19}/></span></div>
+        </motion.a>)}
+      </div>
+      <a className="github-more" href="https://github.com/agastyatomar?tab=repositories" target="_blank" rel="noreferrer">MORE PROJECTS ON GITHUB <ArrowUpRight size={15}/></a>
+    </section>
 
-    <section className="work section-pad wrap" id="work"><div className="section-kicker"><span>03 / SELECTED EXPERIMENTS</span><span>A FEW THINGS I'VE BUILT</span></div><div className="work-heading"><h2>MADE WITH<br/><em>INTENTION.</em></h2><p>A collection of ideas, experiments<br/>and projects in progress.</p></div><div className="project-list">{projects.map(p=><a className="project" href={p.url} target="_blank" rel="noreferrer" key={p.name}><span className="project-n">{p.n}</span><div className={'project-art '+p.color}><span>{p.name.split(' ').map(s=>s[0]).join('')}</span><i>✳</i></div><div className="project-info"><span>{p.type}</span><h3>{p.name}</h3><p>{p.desc}</p><div className="tags">{p.tags.map(t=><small key={t}>{t}</small>)}</div></div><span className="project-arrow"><ArrowUpRight/></span></a>)}</div><a className="all-work" href="https://github.com/agastyatomar?tab=repositories" target="_blank" rel="noreferrer">MORE ON GITHUB <ArrowUpRight size={16}/></a></section>
+    <section className="about-section section shell" id="about">
+      <div className="section-label"><span>03 — A LITTLE ABOUT ME</span><span>THE PERSON BEHIND THE PIXELS</span></div>
+      <div className="about-grid"><div><span className="about-star">✳</span><h2>Curious by<br/>nature. <em>Builder</em><br/>by choice.</h2></div><div className="about-text"><p className="about-lead">I'm Aadi — a student from India who loves exploring how technology works.</p><p>I learn by building, experimenting and solving problems. My interests move between web development, apps, AI, automation and interface design. Every project teaches me something new, and that's the fun part.</p><p>I'm still at the beginning of the journey — focused on learning deeply, making useful things and turning ideas into reality.</p><div className="about-facts"><span>BASED IN <b>INDIA</b></span><span>FOCUS <b>BUILD & LEARN</b></span><span>STATUS <b>OPEN TO IDEAS</b></span></div></div></div>
+    </section>
 
-    <section className="card-section section-pad"><div className="wrap"><div className="section-kicker"><span>04 / A LITTLE MORE PERSONAL</span><span>YOUR FRIENDLY INTERNET BUILDER</span></div><div className="card-layout"><div><h2>THE HUMAN<br/>BEHIND THE<br/><em>SCREEN.</em></h2><p className="card-hint">A small digital ID. Tap to flip it.</p></div><button className={'id-card '+(flipped?'flipped':'')} onClick={()=>setFlipped(!flipped)} aria-label="Flip digital ID card"><div className="card-face card-front"><div className="card-top"><span>AADI® / DIGITAL ID</span><Sparkles size={18}/></div><div className="card-avatar">a<span>.</span></div><div className="card-name">AGASTYA<br/>TOMAR<span>®</span></div><div className="card-bottom"><span>STUDENT / BUILDER</span><span>INDIA · 2026</span></div></div><div className="card-face card-back"><Sparkles size={24}/><h3>STAY CURIOUS.</h3><p>Keep making<br/>interesting things.</p><span>FLIP TO RETURN ↻</span></div></button></div></div></section>
-
-    <section className="contact section-pad wrap" id="contact"><div className="section-kicker"><span>05 / YOUR TURN</span><span>HAVE A GOOD IDEA?</span></div><h2>LET'S MAKE<br/>IT <em>REAL.</em><span className="lime">✳</span></h2><div className="contact-bottom"><p>Have a project, an interesting thought<br/>or just want to say hello? My inbox is open.</p><a href="mailto:hello@agastyatomar.dev" className="contact-btn">SAY HELLO <ArrowUpRight/></a></div></section>
-    <footer className="footer wrap" id="contact"><a className="brand" href="#top"><span className="brand-mark">a.</span><span>AADI<span className="brand-dot">®</span></span></a><span>DESIGNED & BUILT WITH CURIOSITY.</span><div className="socials"><a href="https://github.com/agastyatomar" aria-label="GitHub"><Github/></a><a href="https://instagram.com/pvttt.aadi_315" aria-label="Instagram"><Instagram/></a><a href="mailto:hello@agastyatomar.dev" aria-label="Email"><Mail/></a></div><span>© 2026 AADI</span></footer>
+    <section className="contact-section section" id="contact"><div className="shell"><div className="section-label"><span>04 — LET'S CONNECT</span><span>HAVE AN IDEA IN MIND?</span></div><div className="contact-content"><span className="contact-kicker"><i className="status-dot"/> OPEN TO GOOD IDEAS & COLLABORATIONS</span><h2>Got a project?<br/><em>Let's talk.</em></h2><p>Have an interesting idea, want to collaborate, or just want to say hello? Find me here.</p><div className="contact-links"><a href="https://github.com/agastyatomar" target="_blank" rel="noreferrer"><Github size={17}/> GitHub <ArrowUpRight size={15}/></a><a href="https://instagram.com/pvttt.aadi_315" target="_blank" rel="noreferrer"><Instagram size={17}/> Instagram <ArrowUpRight size={15}/></a></div></div></div></section>
+    <footer className="footer shell"><a className="wordmark" href="#top"><span className="mark">a.</span><span>AADI<span className="reg">®</span></span></a><span>DESIGNED WITH CURIOSITY · BUILT WITH CARE</span><a href="#top">BACK TO TOP ↑</a><span>© 2026 AGASTYA TOMAR</span></footer>
   </main>
 }
 export default App
