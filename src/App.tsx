@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, type CSSProperties } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { ArrowDown, ArrowUpRight, Github, Instagram, Menu, X, ChevronLeft, ChevronRight, Sparkles, Clock3 } from 'lucide-react'
 
@@ -70,7 +70,7 @@ function App() {
       <div className="doors-intro"><h2>Magic happens<br/><em>behind the doors.</em></h2><p>Different interests, one curious mind.<br/>Pick a door and explore what I love building.</p></div>
       <div className="doors-layout">
         <div className="door-stack" role="tablist" aria-label="Areas of work">
-          {services.map((s,i)=><button role="tab" aria-selected={active===i} className={'door-pill '+(active===i?'selected':'')} style={{'--door-color':s.color} as React.CSSProperties} key={s.id} onClick={() => setActive(i)}><span className="door-symbol">{s.icon}</span><span>{s.title}</span><ArrowUpRight size={17}/></button>)}
+          {services.map((s,i)=><button role="tab" aria-selected={active===i} className={'door-pill '+(active===i?'selected':'')} style={{'--door-color':s.color} as CSSProperties} key={s.id} onClick={() => setActive(i)}><span className="door-symbol">{s.icon}</span><span>{s.title}</span><ArrowUpRight size={17}/></button>)}
         </div>
         <AnimatePresence mode="wait">
           <motion.article className="door-detail-panel" key={selected.id} initial={{opacity:0,x:24}} animate={{opacity:1,x:0}} exit={{opacity:0,x:-16}} transition={{duration:.35}}>
